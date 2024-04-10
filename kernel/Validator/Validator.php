@@ -23,6 +23,8 @@ class Validator
             foreach($rules as $rule) {
                 $rule = explode(':', $rule);
 
+
+
                 $ruleName  = $rule[0];
                 $ruleValue = $rule[1] ?? null;
 
@@ -63,6 +65,11 @@ class Validator
             case 'max': {
                 if (strlen($value) > $ruleValue) {
                     return "Field $key must be at most {$ruleValue} characters long";
+                }
+            } break;
+            case 'email': {
+                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                    return "Field $key must be a valid email address";
                 }
             } break;
         }
