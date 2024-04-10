@@ -21,12 +21,23 @@ class Database implements DatabaseInterface
 
     public function insert(string $table, array $data): int|false
     {
-        return false;
+        $fields = array_keys($data);
+        $colums = implode(', ', $fields);
+        $bind   = implode(', ', array_map(fn ($field) => ":$field", $fields));
+        $sql    = "INSERT INTO $table($colums) VALUES($bind)";
+        $stmt   = $this->pdo->prepare($sql);
+
+        try {
+            $stmt->execute($data);
+        } catch (\PDOException $e) {
+            return false;
+        }
+
+        return (int) $this->pdo->lastInsertId();
     }
 
     private function connect()
     {
-
         $driver   = $this->config->get('database.driver');
         $host     = $this->config->get('database.host');
         $charset  = $this->config->get('database.charset');
@@ -42,6 +53,5 @@ class Database implements DatabaseInterface
         } catch(\PDOException $e) {
             print_r("Default error: " . $e->getMessage());
         }
-        
     }
 }
