@@ -33,7 +33,7 @@ abstract class Controller
         $this->validator    = $di->get('validator');
         $this->redirect     = $di->get('redirect');
         $this->session      = $di->get('session');
-        $this->database    = $di->get('database');
+        $this->database     = $di->get('database');
     }
 
 
